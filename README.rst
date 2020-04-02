@@ -19,7 +19,9 @@ in  ytcc.main
 
 .. code:: python
 
-   video_id = 'id_video'
+   id = 'id_video or playlist'
+   
+   download = Download(playlist=False) #set playlist=True if the id of a playlist
    
 create file ytcc.credential.py as:
 
