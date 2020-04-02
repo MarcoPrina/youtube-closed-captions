@@ -52,8 +52,8 @@ class Download():
             storage = Storage(file_path)
             id = storage.get_video_id()
             with open(file_path) as f:
-                output[id] = (self.get_captions_from_output(f.read(), language))
-            storage.remove_file()
+                output[id] = (self.get_captions_from_output(f.read()))
+            #storage.remove_file()
         return output
 
     def get_result(self, video_id: str, language: str = 'it') -> int:
@@ -82,14 +82,9 @@ class Download():
             parameter = 'v'
         return '{0}?{1}'.format(self.base_url, urlencode({parameter : video_id}))
 
-    def get_captions_from_output(self, output: str, language: str = 'it') -> str:
-        reader = WebVTTReader()
+    def get_captions_from_output(self, output: str) -> str:
 
-        temp_final = ''
-
-        for caption in reader.read(output, language).get_captions(language):
-            stripped = str(caption).replace(r'\n', "\r\n").replace(r'"', "'")
-            temp_final += stripped
+        temp_final = output.replace('\n', "\r\n").replace('"', "'")
 
         final = self.remove_duplicate_lines(temp_final)
 
@@ -97,21 +92,10 @@ class Download():
 
     def remove_duplicate_lines(self, temp_final: str) -> str:
         final = ''
-        previous = ["", ""]
         for line in temp_final.split("\r\n"):
-            part = line.split("''")
+            if line.__contains__('<c>'):
+                final += line.replace('<c>', '').replace('</c>', '') + "\r\n"
 
-            if previous[0] == part[0] and len(part) == 2:
-                start = previous[1].split(" --> ")[0]
-                end = part[1].split(" --> ")[1]
-                part[1] = start + " --> " + end
-                previous = part
-
-            if previous[0] != part[0]:
-                final += "\r\n" + "''".join(previous)
-                previous = part
-
-        final += "\r\n" + "''".join(previous)
         return final
 
 
