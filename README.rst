@@ -19,7 +19,7 @@ in  main.py
 
    id = 'id_video or playlist'
    
-   download = Download(playlist=False) #set playlist=True if the id of a playlist
+   download = Download(playlist=False) #set playlist=True if the id is from a playlist
    
 update the file ytcc.credential.py with your credentials:
 
