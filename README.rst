@@ -14,16 +14,17 @@ Requirements
 
 To Use
 ~~~~~~
-
+  
+in  ytcc.main
 .. code:: python
 
-   from ytcc.download import Download
+   video_id = 'id_video'
+   
+create file ytcc.credential.py as:
+.. code:: python
 
-   video_id = 'jNQXAC9IVRw'
-   download = Download()
-   # Language is optional and default to "en"
-   # YouTube uses "en","fr" not "en-US", "fr-FR"
-   captions = download.get_captions(video_id, 'en')
+  username = 'youtube_email'
+  password = 'youtube_password'
 
 Development
 ===========
