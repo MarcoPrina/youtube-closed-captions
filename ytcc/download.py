@@ -6,6 +6,8 @@ from pycaption import WebVTTReader
 from os import remove
 import re
 from urllib.parse import urlencode
+
+from ytcc import credential
 from ytcc.storage import Storage
 from ytcc.fake_logger import FakeLogger
 
@@ -18,7 +20,10 @@ class Download():
             'skip_download': True,
             'writeautomaticsub': True,
             'outtmpl': 'subtitle_%(id)s',
-            'logger': FakeLogger()
+            'logger': FakeLogger(),
+            'username': credential.username,
+            'password': credential.password,
+            'cookiefile': "cookies.txt"
         }
         self.opts.update(opts)
 
