@@ -3,9 +3,9 @@ from pathlib import Path
 
 
 def main():
-    id = 'PL5Qa6yv61yWK-FO2GWxHozVCjdvKRwDBz'
+    id = 'PL4cUxeGkcC9jticTs2l6Nt2lsybNW0-4O'
 
-    download = Download(playlist=True)
+    download = Download(playlist=len(id) > 12)
 
     captions_files = download.get_captions(id, 'it')
 
@@ -18,6 +18,6 @@ def main():
 
         text_file.close()
 
+
 if __name__ == "__main__":
     main()
-
