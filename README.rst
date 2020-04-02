@@ -13,7 +13,7 @@ Requirements
 To Use
 ~~~~~~
   
-in  ytcc.main
+in  main.py
 
 .. code:: python
 
