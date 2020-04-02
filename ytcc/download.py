@@ -66,22 +66,31 @@ class Download():
 
         temp_final = ''
         for caption in reader.read(output, language).get_captions(language):
-            stripped = self.remove_time_from_caption(
-                str(caption).replace(r'\n', "\n"))
+            stripped = str(caption).replace(r'\n', "\r\n").replace(r'"', "'")
             temp_final += stripped
 
+        final = self.remove_duplicate_lines(temp_final)
+
+        return final
+
+    def remove_duplicate_lines(self, temp_final: str) -> str:
         final = ''
-        previous = ''
-        for line in temp_final.split("\n"):
-            if previous != line:
-                final += "\n" + line
-            previous = line
+        previous = ["", ""]
+        for line in temp_final.split("\r\n"):
+            part = line.split("''")
 
-        return final.replace("\n", ' ')[1:]
+            if previous[0] == part[0] and len(part) == 2:
+                start = previous[1].split(" --> ")[0]
+                end = part[1].split(" --> ")[1]
+                part[1] = start + " --> " + end
+                previous = part
 
-    def remove_time_from_caption(self, caption: str) -> str:
-        caption = caption[1:-1]
-        return re.sub(r"^.*?\n", "\n", caption)
+            if previous[0] != part[0]:
+                final += "\r\n" + "''".join(previous)
+                previous = part
+
+        final += "\r\n" + "''".join(previous)
+        return final
 
 
 class DownloadException(Exception):
