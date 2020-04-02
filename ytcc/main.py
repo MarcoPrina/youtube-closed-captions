@@ -2,16 +2,16 @@ from ytcc.download import Download
 
 
 def main():
-    video_id = 'PL5Qa6yv61yWK-FO2GWxHozVCjdvKRwDBz'
+    id = 'PL5Qa6yv61yWK-FO2GWxHozVCjdvKRwDBz'
 
     download = Download(playlist=True)
 
-    captions_files = download.get_captions(video_id, 'it')
+    captions_files = download.get_captions(id, 'it')
 
-    for id in captions_files:
-        text_file = open(id + ".txt", "w")
+    for video_id in captions_files:
+        text_file = open("../Outputs/" + video_id + ".txt", "w")
 
-        text_file.write(captions_files[id])
+        text_file.write(captions_files[video_id])
 
         text_file.close()
 
