@@ -16,11 +16,13 @@ To Use
 ~~~~~~
   
 in  ytcc.main
+
 .. code:: python
 
    video_id = 'id_video'
    
 create file ytcc.credential.py as:
+
 .. code:: python
 
   username = 'youtube_email'
