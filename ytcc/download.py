@@ -1,6 +1,9 @@
 # -*- coding: UTF-8 -*-
 
 from __future__ import unicode_literals
+
+import glob, os
+
 import youtube_dl
 from pycaption import WebVTTReader
 from os import remove
@@ -15,7 +18,7 @@ from ytcc.fake_logger import FakeLogger
 class Download():
     base_url = 'http://www.youtube.com/watch'
 
-    def __init__(self, opts: dict = {}) -> None:
+    def __init__(self, opts: dict = {}, playlist: bool = False) -> None:
         self.opts = {
             'skip_download': True,
             'writeautomaticsub': True,
@@ -26,25 +29,34 @@ class Download():
             'cookiefile': "cookies.txt"
         }
         self.opts.update(opts)
+        self.playlist = playlist
+        if playlist:
+            self.base_url = 'http://www.youtube.com/playlist'
+
 
     def update_opts(self, opts: dict) -> None:
         self.opts.update(opts)
 
-    def get_captions(self, video_id: str, language: str = 'en') -> str:
+    def get_captions(self, video_id: str, language: str = 'it') -> dict:
         result = self.get_result(video_id, language)
 
         if result != 0:
             raise Exception(
                 'Unable to download and extract captions: {0}'.format(result))
 
-        storage = Storage(video_id, language)
-        file_path = storage.get_file_path()
-        with open(file_path) as f:
-            output = self.get_captions_from_output(f.read(), language)
-        storage.remove_file()
+
+
+        output = {}
+
+        for file_path in glob.glob("*.vtt"):
+            storage = Storage(file_path)
+            id = storage.get_video_id()
+            with open(file_path) as f:
+                output[id] = (self.get_captions_from_output(f.read(), language))
+            storage.remove_file()
         return output
 
-    def get_result(self, video_id: str, language: str = 'en') -> int:
+    def get_result(self, video_id: str, language: str = 'it') -> int:
         opts = self.opts
         if language:
             opts['subtitleslangs'] = [*opts.get('subtitleslangs', []), language]
@@ -64,12 +76,17 @@ class Download():
                         str(err)))
 
     def get_url_from_video_id(self, video_id: str) -> str:
-        return '{0}?{1}'.format(self.base_url, urlencode({'v': video_id}))
+        if self.playlist:
+            parameter = "list"
+        else:
+            parameter = 'v'
+        return '{0}?{1}'.format(self.base_url, urlencode({parameter : video_id}))
 
-    def get_captions_from_output(self, output: str, language: str = 'en') -> str:
+    def get_captions_from_output(self, output: str, language: str = 'it') -> str:
         reader = WebVTTReader()
 
         temp_final = ''
+
         for caption in reader.read(output, language).get_captions(language):
             stripped = str(caption).replace(r'\n', "\r\n").replace(r'"', "'")
             temp_final += stripped

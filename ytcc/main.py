@@ -2,17 +2,18 @@ from ytcc.download import Download
 
 
 def main():
-    video_id = 'fsLrmfA_QF8'
-    download = Download()
-    # Language is optional and default to "en"
-    # YouTube uses "en","fr" not "en-US", "fr-FR"
-    captions = download.get_captions(video_id, 'it')
+    video_id = 'PL5Qa6yv61yWK-FO2GWxHozVCjdvKRwDBz'
 
-    text_file = open("Output.txt", "w")
+    download = Download(playlist=True)
 
-    text_file.write(captions)
+    captions_files = download.get_captions(video_id, 'it')
 
-    text_file.close()
+    for id in captions_files:
+        text_file = open(id + ".txt", "w")
+
+        text_file.write(captions_files[id])
+
+        text_file.close()
 
 if __name__ == "__main__":
     main()
