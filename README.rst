@@ -21,7 +21,7 @@ in  main.py
    
    download = Download(playlist=False) #set playlist=True if the id of a playlist
    
-create file ytcc.credential.py as:
+update the file ytcc.credential.py with your credentials:
 
 .. code:: python
 
