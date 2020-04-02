@@ -53,7 +53,7 @@ class Download():
             id = storage.get_video_id()
             with open(file_path) as f:
                 output[id] = (self.get_captions_from_output(f.read()))
-            #storage.remove_file()
+            storage.remove_file()
         return output
 
     def get_result(self, video_id: str, language: str = 'it') -> int:
