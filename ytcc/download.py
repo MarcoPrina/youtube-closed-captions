@@ -2,17 +2,14 @@
 
 from __future__ import unicode_literals
 
-import glob, os
-
-import youtube_dl
-from pycaption import WebVTTReader
-from os import remove
-import re
+import glob
 from urllib.parse import urlencode
 
+import youtube_dl
+
 from ytcc import credential
-from ytcc.storage import Storage
 from ytcc.fake_logger import FakeLogger
+from ytcc.storage import Storage
 
 
 class Download():
